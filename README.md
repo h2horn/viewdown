@@ -1,4 +1,4 @@
 viewdown
 ========
 
-Simple Mardown Viewer
+Simple Markdown Viewer
