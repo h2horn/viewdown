@@ -1,5 +1,7 @@
 
-QT += webkit
+QT += webkitwidgets widgets
 TARGET = viewdown
-SOURCES += main.pp
+HEADERS += mainwindow.h
+SOURCES += main.cpp \
+           mainwindow.cpp
 
