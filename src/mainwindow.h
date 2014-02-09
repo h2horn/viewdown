@@ -1,6 +1,7 @@
 #include <QMainWindow>
 
 class QWebView;
+class QFileSystemWatcher;
 
 class MainWindow : public QMainWindow
 {
@@ -9,7 +10,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 
+protected slots:
+    void loadFile(const QString &path);
+
 private:
     QWebView *view;
+    QFileSystemWatcher *watcher;
 };
 
