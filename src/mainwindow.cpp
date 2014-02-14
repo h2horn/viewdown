@@ -11,6 +11,9 @@ MainWindow::MainWindow()
         view->setHtml("Failed", QUrl(""));
     }
 
+    renderer = hoedown_html_renderer_new(0, 0);
+    document = hoedown_document_new(renderer, 0, 16);
+
     connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(loadFile(QString)));
 
     setCentralWidget(view);
@@ -23,7 +26,14 @@ void MainWindow::loadFile(const QString &path) {
         view->setHtml("Failed", QUrl(""));
     }
     QTextStream in(&f);
-    view->setHtml(in.readAll(), QUrl(""));
+
+    QByteArray ba = in.readAll().toLocal8Bit();
+
+    hoebuf = hoedown_buffer_new(64);
+    hoedown_document_render(document, hoebuf, (unsigned char*)ba.constData(), ba.size());
+
+    view->setHtml(QString::fromLocal8Bit((char*)hoebuf->data), QUrl(""));
+    hoedown_buffer_free(hoebuf);
     f.close();
 }
 

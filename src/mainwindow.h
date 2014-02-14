@@ -1,4 +1,6 @@
 #include <QMainWindow>
+#include "hoedown/src/html.h"
+#include "hoedown/src/document.h"
 
 class QWebView;
 class QFileSystemWatcher;
@@ -16,5 +18,8 @@ protected slots:
 private:
     QWebView *view;
     QFileSystemWatcher *watcher;
+    hoedown_renderer *renderer;
+    hoedown_document *document;
+    hoedown_buffer *hoebuf;
 };
 
