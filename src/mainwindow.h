@@ -26,7 +26,7 @@ private:
 	hoedown_renderer *renderer;
 	hoedown_document *document;
 	hoedown_buffer *hoebuf;
-	QString css;
+	QUrl baseUrl;
 	static const QString header;
 	static const QString body;
 	static const QString footer;

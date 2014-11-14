@@ -3,8 +3,7 @@
 #include <QDebug>
 #include "mainwindow.h"
 
-const QString MainWindow::header = QString("<html><head><style>");
-const QString MainWindow::body = QString("</style></head><body>");
+const QString MainWindow::header = QString("<html><head></head><body>");
 const QString MainWindow::footer = QString("</body></html>");
 
 MainWindow::MainWindow(const QString file)
@@ -12,10 +11,19 @@ MainWindow::MainWindow(const QString file)
 	view = new QWebView(this);
 	watcher = new QFileSystemWatcher();
 
+	QFileInfo info = QFileInfo(file);
+	if (!info.exists()) {
+		view->setHtml("Failed");
+	}
+
 	if (!watcher->addPath(file)) {
 		view->setHtml("Failed");
 	}
 
+	baseUrl = QUrl("file://"+info.canonicalPath()+"/");
+
+	view->settings()->setUserStyleSheetUrl(QUrl("file://"+QFileInfo("github.css").absoluteFilePath()));
+	qDebug() << view->settings()->userStyleSheetUrl();
 	renderer = hoedown_html_renderer_new(hoedown_html_flags(0), 0);
 	// github style exensions
 	hoedown_extensions ext = hoedown_extensions(HOEDOWN_EXT_TABLES |
@@ -26,17 +34,7 @@ MainWindow::MainWindow(const QString file)
 	connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(loadFile(QString)));
 
 	setCentralWidget(view);
-	loadCss("github.css");
 	loadFile(file);
-}
-
-void MainWindow::loadCss(const QString &path) {
-	QFile f(path);
-	if (!f.open(QFile::ReadOnly | QFile::Text)){
-		view->setHtml("Failed");
-	}
-	css = f.readAll();
-	f.close();
 }
 
 void MainWindow::loadFile(const QString &path) {
@@ -56,7 +54,7 @@ void MainWindow::loadFile(const QString &path) {
 	hoedown_buffer_free(hoebuf);
 
 	qDebug() << "Reload";
-	view->setHtml(header+css+body+md+footer);
+	view->setHtml(header+md+footer, baseUrl);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
