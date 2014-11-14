@@ -10,7 +10,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow();
+    MainWindow(const QString file);
     ~MainWindow();
 
 protected slots:

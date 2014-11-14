@@ -7,12 +7,12 @@ const QString MainWindow::header = QString("<html><head><style>");
 const QString MainWindow::body = QString("</style></head><body>");
 const QString MainWindow::footer = QString("</body></html>");
 
-MainWindow::MainWindow()
+MainWindow::MainWindow(const QString file)
 {
     view = new QWebView(this);
     watcher = new QFileSystemWatcher();
 
-    if (!watcher->addPath("test2.md")) {
+    if (!watcher->addPath(file)) {
         view->setHtml("Failed");
     }
 
@@ -27,7 +27,7 @@ MainWindow::MainWindow()
 
     setCentralWidget(view);
     loadCss("github.css");
-    loadFile("test2.md");
+    loadFile(file);
 }
 
 void MainWindow::loadCss(const QString &path) {
