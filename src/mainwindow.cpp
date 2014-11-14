@@ -14,15 +14,19 @@ MainWindow::MainWindow(const QString file)
 	QFileInfo info = QFileInfo(file);
 	if (!info.exists()) {
 		view->setHtml("Failed");
+		return;
 	}
 
 	if (!watcher->addPath(file)) {
 		view->setHtml("Failed");
+		return;
 	}
 
 	baseUrl = QUrl("file://"+info.canonicalPath()+"/");
 
+	// user css style sheet
 	view->settings()->setUserStyleSheetUrl(QUrl("file://"+QFileInfo("github.css").absoluteFilePath()));
+	// open links in external browser
 	view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
 	renderer = hoedown_html_renderer_new(hoedown_html_flags(0), 0);
@@ -43,6 +47,7 @@ void MainWindow::loadFile(const QString &path) {
 	QFile f(path);
 	if (!f.open(QFile::ReadOnly | QFile::Text)){
 		view->setHtml("Failed");
+		return;
 	}
 	QTextStream in(&f);
 
@@ -56,7 +61,10 @@ void MainWindow::loadFile(const QString &path) {
 	hoedown_buffer_free(hoebuf);
 
 	qDebug() << "Reload";
+	// restore scroll position
+	QPoint point = view->page()->mainFrame()->scrollPosition();
 	view->setHtml(header+md+footer, baseUrl);
+	view->page()->mainFrame()->setScrollPosition(point);
 }
 
 void MainWindow::openExtern(const QUrl &url) {
