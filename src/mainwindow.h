@@ -16,6 +16,7 @@ public:
 
 protected slots:
 	void loadFile(const QString &path);
+	void openExtern(const QUrl &url);
 
 private:
 	void loadCss(const QString &path);

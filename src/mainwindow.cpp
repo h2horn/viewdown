@@ -23,7 +23,8 @@ MainWindow::MainWindow(const QString file)
 	baseUrl = QUrl("file://"+info.canonicalPath()+"/");
 
 	view->settings()->setUserStyleSheetUrl(QUrl("file://"+QFileInfo("github.css").absoluteFilePath()));
-	qDebug() << view->settings()->userStyleSheetUrl();
+	view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+
 	renderer = hoedown_html_renderer_new(hoedown_html_flags(0), 0);
 	// github style exensions
 	hoedown_extensions ext = hoedown_extensions(HOEDOWN_EXT_TABLES |
@@ -32,6 +33,7 @@ MainWindow::MainWindow(const QString file)
 	document = hoedown_document_new(renderer, ext, 16);
 
 	connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(loadFile(QString)));
+	connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(openExtern(QUrl)));
 
 	setCentralWidget(view);
 	loadFile(file);
@@ -55,6 +57,10 @@ void MainWindow::loadFile(const QString &path) {
 
 	qDebug() << "Reload";
 	view->setHtml(header+md+footer, baseUrl);
+}
+
+void MainWindow::openExtern(const QUrl &url) {
+	QDesktopServices::openUrl(url);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event) {
