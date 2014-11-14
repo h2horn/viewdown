@@ -1,39 +1,65 @@
 #include <QtWidgets>
 #include <QtWebKitWidgets>
+#include <QDebug>
 #include "mainwindow.h"
+
+const QString MainWindow::header = QString("<html><head><style>");
+const QString MainWindow::body = QString("</style></head><body>");
+const QString MainWindow::footer = QString("</body></html>");
 
 MainWindow::MainWindow()
 {
     view = new QWebView(this);
     watcher = new QFileSystemWatcher();
 
-    if (!watcher->addPath("test.md")) {
-        view->setHtml("Failed", QUrl(""));
+    if (!watcher->addPath("test2.md")) {
+        view->setHtml("Failed");
     }
 
-    renderer = hoedown_html_renderer_new(0, 0);
-    document = hoedown_document_new(renderer, 0, 16);
+    renderer = hoedown_html_renderer_new(hoedown_html_flags(0), 0);
+    // github style exensions
+    hoedown_extensions ext = hoedown_extensions(HOEDOWN_EXT_TABLES |
+            HOEDOWN_EXT_FENCED_CODE | HOEDOWN_EXT_AUTOLINK |
+            HOEDOWN_EXT_STRIKETHROUGH | HOEDOWN_EXT_NO_INTRA_EMPHASIS);
+    document = hoedown_document_new(renderer, ext, 16);
 
     connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(loadFile(QString)));
 
     setCentralWidget(view);
-    loadFile("test.md");
+    loadCss("github.css");
+    loadFile("test2.md");
+}
+
+void MainWindow::loadCss(const QString &path) {
+    QFile f(path);
+    if (!f.open(QFile::ReadOnly | QFile::Text)){
+        view->setHtml("Failed");
+    }
+    css = f.readAll();
+    f.close();
 }
 
 void MainWindow::loadFile(const QString &path) {
     QFile f(path);
     if (!f.open(QFile::ReadOnly | QFile::Text)){
-        view->setHtml("Failed", QUrl(""));
+        view->setHtml("Failed");
     }
     QTextStream in(&f);
 
     QByteArray ba = in.readAll().toLocal8Bit();
+    f.close();
 
-    hoebuf = hoedown_buffer_new(64);
+    hoebuf = hoedown_buffer_new(16);
     hoedown_document_render(document, hoebuf, (unsigned char*)ba.constData(), ba.size());
 
-    view->setHtml(QString::fromLocal8Bit((char*)hoebuf->data), QUrl(""));
+    QString md = QString::fromLocal8Bit((char*)hoebuf->data, hoebuf->size);
     hoedown_buffer_free(hoebuf);
-    f.close();
+
+    qDebug() << "Reload";
+    view->setHtml(header+css+body+md+footer);
 }
 
+MainWindow::~MainWindow() {
+    hoedown_document_free(document);
+    hoedown_html_renderer_free(renderer);
+}
