@@ -1,3 +1,0 @@
-[submodule "src/hoedown"]
-	path = src/hoedown
-	url = https://github.com/hoedown/hoedown
