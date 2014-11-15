@@ -25,7 +25,7 @@ MainWindow::MainWindow(const QString file)
 	baseUrl = QUrl("file://"+info.canonicalPath()+"/");
 
 	// user css style sheet
-	view->settings()->setUserStyleSheetUrl(QUrl("file://"+QFileInfo("github.css").absoluteFilePath()));
+	view->settings()->setUserStyleSheetUrl(QUrl("qrc:///github.css"));
 	// open links in external browser
 	view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
