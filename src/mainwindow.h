@@ -1,7 +1,7 @@
 #include <QMainWindow>
 #include <QKeyEvent>
-#include "hoedown/src/html.h"
-#include "hoedown/src/document.h"
+#include <hoedown/html.h>
+#include <hoedown/document.h>
 
 class QWebView;
 class QFileSystemWatcher;
