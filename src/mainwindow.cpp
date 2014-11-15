@@ -22,6 +22,8 @@ MainWindow::MainWindow(const QString file)
 		return;
 	}
 
+	this->setWindowTitle(file + " - ViewDown");
+
 	baseUrl = QUrl("file://"+info.canonicalPath()+"/");
 
 	// user css style sheet
