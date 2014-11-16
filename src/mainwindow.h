@@ -4,6 +4,8 @@
 #include <hoedown/document.h>
 
 class QWebView;
+class QFileInfo;
+class QFile;
 class QFileSystemWatcher;
 
 class MainWindow : public QMainWindow
@@ -11,11 +13,11 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	MainWindow(const QString file);
+	MainWindow(QStringList files, QUrl styleUrl);
 	~MainWindow();
 
 protected slots:
-	void loadFile(const QString &path);
+	void loadFile();
 	void openExtern(const QUrl &url);
 
 private:
@@ -28,8 +30,9 @@ private:
 	hoedown_document *document;
 	hoedown_buffer *hoebuf;
 	QUrl baseUrl;
+	QFile *file;
+	QFileInfo *info;
 	static const QString header;
-	static const QString body;
 	static const QString footer;
 };
 
