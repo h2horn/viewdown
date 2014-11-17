@@ -83,6 +83,8 @@ void MainWindow::loadNewFile(const QString &fileName) {
 }
 
 void MainWindow::reload() {
+	QWebSettings::clearMemoryCaches();
+
 	info->refresh();
 	if (!file->open(QFile::ReadOnly | QFile::Text)){
 		view->setHtml(header+QString("Failed to open  %1!").arg(info->fileName())+footer);

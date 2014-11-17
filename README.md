@@ -45,11 +45,6 @@ Install
 
 	make
 
-ToDo
-----
-
-* clear cache on reload
-
 License
 -------
 
