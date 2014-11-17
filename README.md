@@ -49,8 +49,6 @@ ToDo
 ----
 
 * clear cache on reload
-* disable right click menu
-* open developer tools
 
 License
 -------

@@ -13,6 +13,8 @@ MainWindow::MainWindow(QStringList files, QUrl styleUrl)
 	view->settings()->setUserStyleSheetUrl(styleUrl);
 	// open links in external browser
 	view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+	// disable right click menu
+	view->setContextMenuPolicy(Qt::NoContextMenu);
 
 	// setup markdown renderer
 	renderer = hoedown_html_renderer_new(hoedown_html_flags(0), 0);
