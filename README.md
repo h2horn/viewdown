@@ -25,6 +25,7 @@ Features
 * open links in external browser
 * default github style css
 * watch additional files / directories as reload trigger
+* clear cache on reload
 
 | Key | Action         |
 |:---:|:--------------:|
@@ -43,7 +44,17 @@ Dependencies
 Install
 -------
 
+#### Archlinux
+
+Available in [AUR](https://aur.archlinux.org/packages/viewdown-git/)
+
+	yaourt -S viewdown-git
+
+#### From source
+
+	qmake
 	make
+	./viewdown -h
 
 License
 -------
