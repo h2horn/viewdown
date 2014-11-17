@@ -4,6 +4,7 @@
 #include <hoedown/document.h>
 
 class QWebView;
+class QWebInspector;
 class QFileInfo;
 class QFile;
 class QFileSystemWatcher;
@@ -24,9 +25,12 @@ private:
 	void loadCss(const QString &path);
 	void requestNewFile();
 	void loadNewFile(const QString &file);
+	void toggleInspector();
 	void keyPressEvent(QKeyEvent *event);
+	void closeEvent(QCloseEvent *event);
 
 	QWebView *view;
+	QWebInspector *inspector = NULL;
 	QFileSystemWatcher *watcher;
 	hoedown_renderer *renderer;
 	hoedown_document *document;

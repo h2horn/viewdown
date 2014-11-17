@@ -26,11 +26,12 @@ Features
 * default github style css
 * watch additional files / directories as reload trigger
 
-| Key | Action        |
-|:---:|:-------------:|
-|  q  | close Window  |
-|  r  | reload        |
-|  o  | open file     |
+| Key | Action         |
+|:---:|:--------------:|
+|  q  | close Window   |
+|  r  | reload         |
+|  o  | open file      |
+|  i  | open inspector |
 
 Dependencies
 ------------

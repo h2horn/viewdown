@@ -1,6 +1,5 @@
 #include <QtWidgets>
 #include <QtWebKitWidgets>
-#include <QDebug>
 #include "mainwindow.h"
 
 const QString MainWindow::header = QString("<html><head></head><body>");
@@ -35,7 +34,7 @@ MainWindow::MainWindow(QStringList files, QUrl styleUrl)
 		return;
 	}
 
-	for (int i = 0; i < files.size(); i++) {
+	for (int i = 1; i < files.size(); i++) {
 		if (!watcher->addPath(files.at(i)))
 			qWarning("Error watching %s.", qPrintable(files.at(i)));
 	}
@@ -98,7 +97,6 @@ void MainWindow::reload() {
 	QString md = QString::fromLocal8Bit((char*)hoebuf->data, hoebuf->size);
 	hoedown_buffer_free(hoebuf);
 
-	qDebug() << "Reload";
 	// restore scroll position
 	QPoint point = view->page()->mainFrame()->scrollPosition();
 	view->setHtml(header+md+footer, baseUrl);
@@ -109,10 +107,22 @@ void MainWindow::openExtern(const QUrl &url) {
 	QDesktopServices::openUrl(url);
 }
 
+void MainWindow::toggleInspector() {
+	if (!inspector) {
+		view->page()->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
+		inspector = new QWebInspector;
+		inspector->setPage(view->page());
+	}
+	if (inspector->isVisible())
+		inspector->setVisible(false);
+	else
+		inspector->setVisible(true);
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *event) {
 	switch (event->key()) {
 		case Qt::Key_Q:
-			this->close();
+			close();
 			break;
 		case Qt::Key_R:
 			reload();
@@ -120,9 +130,18 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 		case Qt::Key_O:
 			requestNewFile();
 			break;
+		case Qt::Key_I:
+			toggleInspector();
+			break;
 		default:
 			QMainWindow::keyPressEvent(event);
 	}
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+	if (inspector)
+		inspector->close();
+	QMainWindow::closeEvent(event);
 }
 
 MainWindow::~MainWindow() {
