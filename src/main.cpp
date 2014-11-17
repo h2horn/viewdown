@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 	QApplication::setApplicationVersion("1.0");
 
 	QCommandLineParser parser;
-	parser.setApplicationDescription("Markdown viewer, watching the file for saved changes.");
+	parser.setApplicationDescription("Markdown viewer, reloading on changes.");
 	parser.addPositionalArgument("file", "markdown file to view and reload on change.");
 	parser.addPositionalArgument("watch", "files or directories to watch as trigger for reload.", "[watch...]");
 	const QCommandLineOption styleOption("s", "css file to use as stylesheet.", "css");

@@ -24,8 +24,8 @@ MainWindow::MainWindow(QStringList files, QUrl styleUrl)
 	document = hoedown_document_new(renderer, ext, 16);
 
 	watcher = new QFileSystemWatcher();
-	connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(loadFile()));
-	connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(loadFile()));
+	connect(watcher, SIGNAL(fileChanged(QString)), this, SLOT(reload()));
+	connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(reload()));
 	connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(openExtern(QUrl)));
 
 	setCentralWidget(view);
@@ -35,29 +35,56 @@ MainWindow::MainWindow(QStringList files, QUrl styleUrl)
 		return;
 	}
 
-	file = new QFile(files.at(0));
-	info = new QFileInfo(files.at(0));
-	if (!info->exists()) {
-		view->setHtml(header+QString("File %1 doesn't exist!").arg(files.at(0))+footer);
-		return;
-	}
-
 	for (int i = 0; i < files.size(); i++) {
 		if (!watcher->addPath(files.at(i)))
 			qWarning("Error watching %s.", qPrintable(files.at(i)));
 	}
 
-	this->setWindowTitle(files.at(0) + " - ViewDown");
+	loadNewFile(files.at(0));
+}
+
+void MainWindow::requestNewFile() {
+	QString dirName;
+	if (info)
+		dirName = info->canonicalPath();
+	if (dirName.isEmpty())
+		dirName = QDir::homePath();
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+			dirName,
+			tr("Markdown (*.md);;All Files (*)"));
+
+	if (fileName.isEmpty())
+		return;
+
+	loadNewFile(fileName);
+}
+
+void MainWindow::loadNewFile(const QString &fileName) {
+	// remove old watcher
+	if (info)
+		watcher->removePath(info->fileName());
+
+	file = new QFile(fileName);
+	info = new QFileInfo(fileName);
+	if (!info->exists()) {
+		view->setHtml(header+QString("File %1 doesn't exist!").arg(fileName)+footer);
+		return;
+	}
+
+	this->setWindowTitle(fileName + " - ViewDown");
 
 	baseUrl = QUrl("file://"+info->canonicalPath()+"/");
 
-	loadFile();
+	if (!watcher->addPath(fileName))
+		qWarning("Error watching %s.", qPrintable(fileName));
+
+	reload();
 }
 
-void MainWindow::loadFile() {
+void MainWindow::reload() {
 	info->refresh();
 	if (!file->open(QFile::ReadOnly | QFile::Text)){
-		view->setHtml("Failed");
+		view->setHtml(header+QString("Failed to open  %1!").arg(info->fileName())+footer);
 		return;
 	}
 	QTextStream in(file);
@@ -88,7 +115,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 			this->close();
 			break;
 		case Qt::Key_R:
-			loadFile();
+			reload();
+			break;
+		case Qt::Key_O:
+			requestNewFile();
 			break;
 		default:
 			QMainWindow::keyPressEvent(event);

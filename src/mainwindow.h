@@ -17,11 +17,13 @@ public:
 	~MainWindow();
 
 protected slots:
-	void loadFile();
+	void reload();
 	void openExtern(const QUrl &url);
 
 private:
 	void loadCss(const QString &path);
+	void requestNewFile();
+	void loadNewFile(const QString &file);
 	void keyPressEvent(QKeyEvent *event);
 
 	QWebView *view;
@@ -30,8 +32,8 @@ private:
 	hoedown_document *document;
 	hoedown_buffer *hoebuf;
 	QUrl baseUrl;
-	QFile *file;
-	QFileInfo *info;
+	QFile *file = NULL;
+	QFileInfo *info = NULL;
 	static const QString header;
 	static const QString footer;
 };
