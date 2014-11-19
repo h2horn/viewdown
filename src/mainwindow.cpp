@@ -5,12 +5,10 @@
 const QString MainWindow::header = QString("<html><head></head><body>");
 const QString MainWindow::footer = QString("</body></html>");
 
-MainWindow::MainWindow(QStringList files, QUrl styleUrl)
+MainWindow::MainWindow(QStringList files, QUrl styleUrl) : styleUrl(styleUrl)
 {
 	// setup webview
 	view = new QWebView(this);
-	// user css style sheet
-	view->settings()->setUserStyleSheetUrl(styleUrl);
 	// open links in external browser
 	view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 	// disable right click menu
@@ -71,6 +69,12 @@ void MainWindow::loadNewFile(const QString &fileName) {
 		view->setHtml(header+QString("File %1 doesn't exist!").arg(fileName)+footer);
 		return;
 	}
+
+	// use css style sheet if markdown
+	if (info->suffix() == "md")
+		view->settings()->setUserStyleSheetUrl(styleUrl);
+	else
+		view->settings()->setUserStyleSheetUrl(QUrl(""));
 
 	this->setWindowTitle(fileName + " - ViewDown");
 

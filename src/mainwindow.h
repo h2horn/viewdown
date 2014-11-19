@@ -37,6 +37,7 @@ private:
 	hoedown_document *document;
 	hoedown_buffer *hoebuf;
 	QUrl baseUrl;
+	QUrl styleUrl;
 	QFile *file = NULL;
 	QFileInfo *info = NULL;
 	static const QString header;
