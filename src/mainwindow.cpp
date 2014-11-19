@@ -91,20 +91,27 @@ void MainWindow::reload() {
 		return;
 	}
 	QTextStream in(file);
-
-	QByteArray ba = in.readAll().toLocal8Bit();
+	QString data = in.readAll();
 	file->close();
+
+	if (info->suffix() == "md")
+		parseMarkdown(data);
+
+	// restore scroll position
+	QPoint point = view->page()->mainFrame()->scrollPosition();
+	view->setHtml(data, baseUrl);
+	view->page()->mainFrame()->setScrollPosition(point);
+}
+
+void MainWindow::parseMarkdown(QString &data) {
+	QByteArray ba = data.toLocal8Bit();
 
 	hoebuf = hoedown_buffer_new(16);
 	hoedown_document_render(document, hoebuf, (unsigned char*)ba.constData(), ba.size());
 
-	QString md = QString::fromLocal8Bit((char*)hoebuf->data, hoebuf->size);
+	const QString md = QString::fromLocal8Bit((char*)hoebuf->data, hoebuf->size);
 	hoedown_buffer_free(hoebuf);
-
-	// restore scroll position
-	QPoint point = view->page()->mainFrame()->scrollPosition();
-	view->setHtml(header+md+footer, baseUrl);
-	view->page()->mainFrame()->setScrollPosition(point);
+	data = header + md + footer;
 }
 
 void MainWindow::openExtern(const QUrl &url) {

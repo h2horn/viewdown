@@ -28,6 +28,7 @@ private:
 	void toggleInspector();
 	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);
+	void parseMarkdown(QString &data);
 
 	QWebView *view;
 	QWebInspector *inspector = NULL;
