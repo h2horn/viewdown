@@ -36,7 +36,7 @@ MainWindow::MainWindow(QStringList files, QUrl styleUrl) : styleUrl(styleUrl)
 
 	for (int i = 1; i < files.size(); i++) {
 		if (!watcher->addPath(files.at(i)))
-			qWarning("Error watching %s.", qPrintable(files.at(i)));
+			qWarning("Error watching '%s'.", qPrintable(files.at(i)));
 	}
 
 	loadNewFile(files.at(0));
@@ -50,7 +50,7 @@ void MainWindow::requestNewFile() {
 		dirName = QDir::homePath();
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
 			dirName,
-			tr("Markdown (*.md);;All Files (*)"));
+			tr("Markdown (*.md);;HTML (*.html);;All Files (*)"));
 
 	if (fileName.isEmpty())
 		return;
@@ -66,7 +66,7 @@ void MainWindow::loadNewFile(const QString &fileName) {
 	file = new QFile(fileName);
 	info = new QFileInfo(fileName);
 	if (!info->exists()) {
-		view->setHtml(header+QString("File %1 doesn't exist!").arg(fileName)+footer);
+		view->setHtml(header+QString("File `%1` doesn't exist!").arg(fileName)+footer);
 		return;
 	}
 
@@ -91,7 +91,7 @@ void MainWindow::reload() {
 
 	info->refresh();
 	if (!file->open(QFile::ReadOnly | QFile::Text)){
-		view->setHtml(header+QString("Failed to open  %1!").arg(info->fileName())+footer);
+		view->setHtml(header+QString("Failed to open `%1`!").arg(info->fileName())+footer);
 		return;
 	}
 	QTextStream in(file);
