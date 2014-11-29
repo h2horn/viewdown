@@ -8,6 +8,7 @@ int main(int argc, char **argv)
 	QApplication app(argc, argv);
 	QApplication::setApplicationName("ViewDown");
 	QApplication::setApplicationVersion("1.0");
+	app.setWindowIcon(QIcon("qrc:///viewdow.ico"));
 
 	QCommandLineParser parser;
 	parser.setApplicationDescription("Markdown viewer, reloading on changes.");

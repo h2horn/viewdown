@@ -8,4 +8,5 @@ SOURCES += src/main.cpp \
            src/mainwindow.cpp \
 
 RESOURCES = viewdown.qrc
+RC_ICONS = viewdown.ico
 
