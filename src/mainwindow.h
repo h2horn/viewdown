@@ -26,6 +26,7 @@ private:
 	void requestNewFile();
 	void loadNewFile(const QString &file);
 	void toggleInspector();
+	void print();
 	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);
 	void parseMarkdown(QString &data);

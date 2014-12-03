@@ -1,5 +1,5 @@
 
-QT += webkitwidgets widgets
+QT += webkitwidgets widgets printsupport
 TARGET = viewdown
 LIBS += -lhoedown
 HEADERS += src/mainwindow.h \

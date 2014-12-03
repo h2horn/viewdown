@@ -1,5 +1,7 @@
 #include <QtWidgets>
 #include <QtWebKitWidgets>
+#include <QPrinter>
+#include <QPrintDialog>
 #include "mainwindow.h"
 
 const QString MainWindow::header = QString("<html><head></head><body>");
@@ -134,6 +136,14 @@ void MainWindow::toggleInspector() {
 		inspector->setVisible(true);
 }
 
+void MainWindow::print() {
+	QPrinter printer;
+	QPrintDialog dialog(&printer, this);
+	if (dialog.exec() == QDialog::Accepted) {
+		view->page()->mainFrame()->print(&printer);
+	}
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *event) {
 	switch (event->key()) {
 		case Qt::Key_Q:
@@ -147,6 +157,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 			break;
 		case Qt::Key_I:
 			toggleInspector();
+			break;
+		case Qt::Key_P:
+			if (event->modifiers() & Qt::ControlModifier)
+				print();
 			break;
 		default:
 			QMainWindow::keyPressEvent(event);

@@ -27,12 +27,13 @@ Features
 * watch additional files / directories as reload trigger
 * clear cache on reload
 
-| Key | Action         |
-|:---:|:--------------:|
-|  q  | close Window   |
-|  r  | reload         |
-|  o  | open file      |
-|  i  | open inspector |
+|   Key  | Action         |
+|:------:|:--------------:|
+|   q    | close Window   |
+|   r    | reload         |
+|   o    | open file      |
+|   i    | open inspector |
+| Ctrl+p | print Page     |
 
 Dependencies
 ------------
