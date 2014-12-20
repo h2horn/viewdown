@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 		const QString path = parser.value(styleOption);
 		QFileInfo info = QFileInfo(path);
 		if (info.exists())
-			styleUrl = QUrl("file://"+info.canonicalPath()+"/");
+		        styleUrl = QUrl::fromLocalFile(info.canonicalFilePath());
 		else
 			qWarning("No such file: %s", qPrintable(path));
 	}
