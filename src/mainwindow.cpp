@@ -80,7 +80,7 @@ void MainWindow::loadNewFile(const QString &fileName) {
 	}
 	this->setWindowTitle(fileName + " - ViewDown");
 
-	baseUrl = QUrl("file://"+info->canonicalPath()+"/");
+	baseUrl = QUrl::fromLocalFile(info->canonicalFilePath());
 
 	if (!watcher->addPath(fileName))
 		qWarning("Error watching %s.", qPrintable(fileName));
