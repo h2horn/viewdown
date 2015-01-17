@@ -36,6 +36,25 @@ MainWindow::MainWindow(QStringList files, QUrl styleUrl) : styleUrl(styleUrl)
 	connect(watcher, SIGNAL(directoryChanged(QString)), this, SLOT(reload()));
 	connect(view, SIGNAL(linkClicked(QUrl)), this, SLOT(openExtern(QUrl)));
 
+	// Key Shortcuts
+	QShortcut *keyOpen = new QShortcut(QKeySequence::Open, this);
+	connect(keyOpen, SIGNAL(activated()), this, SLOT(requestNewFile()));
+
+	QShortcut *keyQuit = new QShortcut(QKeySequence::Quit, this);
+	connect(keyQuit, SIGNAL(activated()), this, SLOT(close()));
+
+	QShortcut *keyClose = new QShortcut(QKeySequence::Close, this);
+	connect(keyClose, SIGNAL(activated()), this, SLOT(close()));
+
+	QShortcut *keyReload = new QShortcut(QKeySequence::Refresh, this);
+	connect(keyReload, SIGNAL(activated()), this, SLOT(reload()));
+
+	QShortcut *keyPrint = new QShortcut(QKeySequence::Print, this);
+	connect(keyPrint, SIGNAL(activated()), this, SLOT(print()));
+
+	QShortcut *keyInspect = new QShortcut(Qt::CTRL + Qt::Key_I, this);
+	connect(keyInspect, SIGNAL(activated()), this, SLOT(toggleInspector()));
+
 	setCentralWidget(view);
 
 	if (files.size() == 0) {
@@ -141,29 +160,6 @@ void MainWindow::print() {
 	QPrintDialog dialog(&printer, this);
 	if (dialog.exec() == QDialog::Accepted) {
 		view->page()->mainFrame()->print(&printer);
-	}
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *event) {
-	switch (event->key()) {
-		case Qt::Key_Q:
-			close();
-			break;
-		case Qt::Key_R:
-			reload();
-			break;
-		case Qt::Key_O:
-			requestNewFile();
-			break;
-		case Qt::Key_I:
-			toggleInspector();
-			break;
-		case Qt::Key_P:
-			if (event->modifiers() & Qt::ControlModifier)
-				print();
-			break;
-		default:
-			QMainWindow::keyPressEvent(event);
 	}
 }
 

@@ -1,5 +1,5 @@
 #include <QMainWindow>
-#include <QKeyEvent>
+#include <QUrl>
 #include <hoedown/html.h>
 #include <hoedown/document.h>
 
@@ -20,14 +20,13 @@ public:
 protected slots:
 	void reload();
 	void openExtern(const QUrl &url);
+	void requestNewFile();
+	void toggleInspector();
+	void print();
 
 private:
 	void loadCss(const QString &path);
-	void requestNewFile();
 	void loadNewFile(const QString &file);
-	void toggleInspector();
-	void print();
-	void keyPressEvent(QKeyEvent *event);
 	void closeEvent(QCloseEvent *event);
 	void parseMarkdown(QString &data);
 
