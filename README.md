@@ -29,11 +29,11 @@ Features
 
 |   Key  | Action         |
 |:------:|:--------------:|
-|   q    | close Window   |
-|   r    | reload         |
-|   o    | open file      |
-|   i    | open inspector |
-| Ctrl+p | print Page     |
+| Ctrl+W | close Window   |
+| Ctrl+R | reload         |
+| Ctrl+O | open file      |
+| Ctrl+I | open inspector |
+| Ctrl+P | print Page     |
 
 Dependencies
 ------------

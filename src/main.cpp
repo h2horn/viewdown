@@ -3,8 +3,7 @@
 #include <QCommandLineParser>
 #include "mainwindow.h"
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
 	QApplication app(argc, argv);
 	QApplication::setApplicationName("ViewDown");
 	QApplication::setApplicationVersion("1.0");

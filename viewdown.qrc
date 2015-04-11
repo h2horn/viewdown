@@ -3,8 +3,4 @@
 	<file>viewdown.ico</file>
 	<file>github.css</file>
 </qresource>
-<qresource prefix="/highlight">
-	<file alias="highlight.js">highlight.js/src/highlight.js</file>
-	<file alias="default.css">highlight.js/src/styles/dark.css</file>
-</qresource>
 </RCC>

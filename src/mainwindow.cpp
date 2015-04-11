@@ -4,18 +4,10 @@
 #include <QPrintDialog>
 #include "mainwindow.h"
 
-const QString MainWindow::header = QString(
-"<html><head> \
-	<link rel='stylesheet' href='qrc:///github.css'> \
-	<link rel='stylesheet' href='qrc:///highlight/default.css'> \
-	<script src='qrc:///highlight/highlight.js'></script> \
-	<script>hljs.initHighlightingOnLoad();</script> \
-</head><body>"
-);
+const QString MainWindow::header = QString("<html><head>");
 const QString MainWindow::footer = QString("</body></html>");
 
-MainWindow::MainWindow(QStringList files, QUrl styleUrl) : styleUrl(styleUrl)
-{
+MainWindow::MainWindow(QStringList files, QUrl styleUrl) : styleUrl(styleUrl) {
 	// setup webview
 	view = new QWebView(this);
 	// open links in external browser
@@ -58,7 +50,7 @@ MainWindow::MainWindow(QStringList files, QUrl styleUrl) : styleUrl(styleUrl)
 	setCentralWidget(view);
 
 	if (files.size() == 0) {
-		view->setHtml(header+"Open new file with <code>o</code>"+footer);
+		view->setHtml(header+"Open new file with <code>Ctrl+O</code>"+footer);
 		return;
 	}
 
@@ -97,6 +89,13 @@ void MainWindow::loadNewFile(const QString &fileName) {
 		view->setHtml(header+QString("File `%1` doesn't exist!").arg(fileName)+footer);
 		return;
 	}
+
+	// use css style sheet if markdown
+	if (info->suffix() == "md")
+		view->settings()->setUserStyleSheetUrl(styleUrl);
+	else
+		view->settings()->setUserStyleSheetUrl(QUrl(""));
+
 	this->setWindowTitle(fileName + " - ViewDown");
 
 	baseUrl = QUrl::fromLocalFile(info->canonicalFilePath());
